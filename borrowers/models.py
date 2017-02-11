@@ -38,11 +38,11 @@ class Payer(NoSyncModel, models.Model):
     """
     Billing consolidation table
     """
-    person = models.ForeignKey(to='Entity', null=False)
-    cosigner = models.ForeignKey(to='Entity', null=True)
-    biller = models.ForeignKey(to='Biller', null=False)
-    fund = models.ForeignKey(to='Fund', null=False)
-    account = models.CharField(max_length=50, null=False, blank=False)
+    person = models.ForeignKey(to='structures.Person', null=False, related_name='+')
+    cosigner = models.ForeignKey(to='structures.Person', null=True, related_name='+')
+    biller = models.ForeignKey(to='lenders.Biller', null=False, related_name='+')
+    fund = models.ForeignKey(to='lenders.Fund', null=False, related_name='+')
+    account = models.CharField(db_index=True, max_length=50, null=False, blank=False)
     principal_freq = models.CharField(max_length=1, choices=PAYMENT_TERMS)
     interest_freq = models.CharField(max_length=1, choices=PAYMENT_TERMS)
     interest_type = models.CharField(max_length=1, choices=INTEREST_TYPES)
@@ -50,13 +50,13 @@ class Payer(NoSyncModel, models.Model):
     next_bill_date = models.DateField(null=False)
     hold_bill_until = models.DateField(null=True)
     min_pay = models.DecimalField(max_digits=7, decimal_places=2)
-    temp_min_pay = models.CharField(max_digits=7, decimal_places=2)
+    temp_min_pay = models.DecimalField(max_digits=7, decimal_places=2)
     temp_min_pay_until = models.DateField(null=True)
     last_activity = models.DateTimeField()
     last_payment_date = models.DateField()
     last_payment_amount = models.DecimalField(max_digits=9, decimal_places=2)
     credit_bureau_report = models.BooleanField(default=False)
-    collection_agency = models.ForeignKey(to='Agency', null=True)
+    collection_agency = models.ForeignKey(to='vendors.Agency', null=True, related_name='+')
     cycle_day = models.SmallIntegerField(default=1)
     past_due_cnt_15 = models.SmallIntegerField()
     past_due_cnt_30 = models.SmallIntegerField()
@@ -77,10 +77,10 @@ class Obligation(NoSyncModel, models.Model):
     """
     Obligation table: This is the 'loan' splits
     """
-    payer = models.ForeignKey(to='Payer', null=False)
+    payer = models.ForeignKey(to='Payer', null=False, related_name='+')
     sequence = models.SmallIntegerField()
-    loan_type = models.ForeignKey(to='LoanType', max_length=5)
-    status = models.ForeignKey(to='Status')
+    loan_type = models.ForeignKey(to='lenders.LoanType', max_length=5, related_name='+')
+    status = models.ForeignKey(to='structures.Status', related_name='+')
     status_expires = models.DateField(null=True)
     interest_rate = models.FloatField()
     payment_split = models.DecimalField(max_digits=7, decimal_places=2)
@@ -116,7 +116,7 @@ class Obligation(NoSyncModel, models.Model):
     date_principal_changed = models.DateField()
     date_status_changed = models.DateField()
     date_closed = models.DateField(null=True)
-    closed_code = models.ForeignKey(to='TranCode', null=True)
+    closed_code = models.ForeignKey(to='structures.TranCode', null=True, related_name='+')
 
     class Meta:
         db_table = "obligation"

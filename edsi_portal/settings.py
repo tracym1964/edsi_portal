@@ -53,16 +53,11 @@ INSTALLED_APPS = [
     'webpack_loader',
 
     # sub applications
-    'borrowers',
-    'history',
-    'lenders',
-    'mirror',
-    'reports',
-    'structures',
-    'transactions',
-    'users',
-    'web',
-
+    'structures.apps.StructuresConfig',
+    'lenders.apps.LendersConfig',
+    'vendors.apps.VendorsConfig',
+    'borrowers.apps.BorrowersConfig',
+    'history.apps.HistoryConfig',
 ]
 
 MIDDLEWARE_CLASSES = [
