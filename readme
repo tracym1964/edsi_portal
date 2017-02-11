@@ -1,0 +1,12 @@
+https://github.com/tracym1964/edsi_portal.git
+
+Create new repository
+echo "# edsi_portal" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/tracym1964/edsi_portal.git
+git push -u origin master
+
+Clone a repository on a different PC (first-time):
+
