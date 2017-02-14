@@ -8,4 +8,4 @@ environ.Env.read_env()  # reading .env file
 print 'DB_NAME=' + env('DB_NAME')
 print 'DB_USER=' + env('DB_USER')
 print 'DB_PASS=' + env('DB_PASS')
-print 'PORT=' + env('DB_PORT'),
+print 'PORT=' + env('DB_PORT')
