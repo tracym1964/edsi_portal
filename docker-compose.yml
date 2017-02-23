@@ -1,0 +1,55 @@
+version: '2'
+
+services:
+  nginx:
+    restart: always
+    build: ./nginx/
+    ports:
+      - "80:80"
+    volumes:
+      - /www/static
+    volumes_from:
+      - web
+    links:
+      - web:web
+
+  # Redis
+  redis:
+    image: redis:2.8.19
+    hostname: redis
+
+  # RabbitMQ
+  rabbit:
+    hostname: rabbit
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=mypass
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+      - "5671:5671"
+
+  # Django web server
+  web:
+    build: ./edsi_portal/
+    hostname: web
+    command: ./run_web.sh
+    expose:
+      - "8000"
+    # set up links so that web knows about db, rabbit and redis
+    links:
+      - rabbit
+      - redis
+    volumes:
+      - /app/edsi_portal/static/
+
+  # Celery worker
+  worker:
+    build: ./edsi_portal/
+    command: ./run_celery.sh
+    links:
+      - rabbit
+      - redis
+    depends_on:
+      - rabbit

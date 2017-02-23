@@ -1,0 +1,13 @@
+Software/Installation requirements
+==================================
+https://www.rabbitmq.com/install-rpm.html
+    -- dnf install erlang
+    -- dnf install rabbitmq-server
+    -- firewall
+    -- https://jsosic.wordpress.com/2014/09/10/increase-rabbitmq-file-descriptor-limit-without-restart/
+    -- http://kronosapiens.github.io/blog/2015/04/28/rabbitmq-aws.html
+    
+pip install django-celery-beat
+
+http://www.marinamele.com/2014/02/how-to-install-celery-on-django-and.html
+https://www.syncano.io/blog/configuring-running-django-celery-docker-containers-pt-1/
